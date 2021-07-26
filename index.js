@@ -19,10 +19,16 @@ const serverURL = "https://ten-coordinated-spectrum.glitch.me/movies"
             .catch(error => error);
     }
 
+    //function to hide loading when data is loaded in
+    function hideLoading(){
+        $(".loading").addClass("canSee");
+        console.log("this is still working");
+    };
 
     //DISPLAY DATA
     AJAX(serverURL)
         .then(data => console.log(data))
+        .then(hideLoading);
 
     //TODO: Function to remove loading message once data is called
 

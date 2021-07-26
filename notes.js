@@ -15,12 +15,12 @@
     // update movie request
     // delete movie request
 
-// 4: Add contents to HTML
-    // Add loading message
+// 4: Add contents to HTML - DONE
+    // Add loading message - DONE
 
 // 5: Add initial request to get all movies
-    // make get request to get movies
-    // update loading message to disappear when request comes through
+    // make get request to get movies - DONE
+    // update loading message to disappear when request comes through - DONE
     // display all movies on the html page
 
 // 6: Create form for movies
