@@ -25,7 +25,9 @@ const serverURL = "https://ten-coordinated-spectrum.glitch.me/movies"
     AJAX(serverURL)
         .then(data => {console.log("Inital Data Load:"); console.log(data); displayMovies(data); hideLoading()})
 
-    //function to hide loading when data is loaded in
+
+
+//function to hide loading when data is loaded in
     function hideLoading(){
         $(".loading").addClass("canSee");
     };
