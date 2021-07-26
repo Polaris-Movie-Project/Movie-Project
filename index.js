@@ -2,6 +2,8 @@
 
 const serverURL = "https://ten-coordinated-spectrum.glitch.me/movies"
 
+    // <img src="img/example.png" alt="Example Image">
+
     //Call data & get it
     function AJAX(url, method = "GET", data){
 
@@ -36,6 +38,7 @@ const serverURL = "https://ten-coordinated-spectrum.glitch.me/movies"
         //generates html for displaying movie
         movies.forEach(function(movie) {
             $("#movies").append(`<h4>${movie.title}</h4>
+                                <img src="${movie.poster}" alt="Example Image">
                                  <p>${movie.year}</p>
                                  <p>${movie.rating}</p>
                                  <p>${movie.plot}</p>`);
@@ -47,7 +50,12 @@ const serverURL = "https://ten-coordinated-spectrum.glitch.me/movies"
         event.preventDefault();
 
         //POST - Update data with new user input from form
-        AJAX(serverURL, "POST", {title: $("#title").val()})
+        AJAX(serverURL, "POST",
+            {title: $("#title").val(),
+            year: $("#year").val(),
+            rating: $("#rating").val(),
+            plot: $("#plot").val()
+            })
             .then(function (data){
                 console.log(data);
             });
