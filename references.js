@@ -28,8 +28,8 @@
 
 //grab third entry in data base, don't have to specify GET
 //use to grab individual item
-    // AJAX(serverURL + "/3" )
-    //     .then(data => console.log(data))
+    AJAX(serverURL + "/3" )
+        .then(data => console.log(data))
 
 
 //UPDATE/EDIT existing data (whatever has id of 9 in this case)
