@@ -31,12 +31,12 @@ const serverURL = "https://ten-coordinated-spectrum.glitch.me/movies"
     };
 
     //function to add movie data to html
-    function displayMovies(movies){
+    function displayMovies(movies) {
         //resets html to blank, so when user adds movie page is reset
         $("#movies").html("");
 
         //generates html for displaying movie
-        movies.forEach(function(movie) {
+        movies.forEach(function (movie) {
             $("#movies").append(`<h4>${movie.title}</h4>
                                 <img src="${movie.poster}" alt="Example Image">
                                  <p>${movie.year}</p>
