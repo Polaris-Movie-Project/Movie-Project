@@ -19,51 +19,45 @@ const serverURL = "https://ten-coordinated-spectrum.glitch.me/movies"
             .catch(error => error);
     }
 
+    //DISPLAY DATA
+    AJAX(serverURL)
+        .then(data => {console.log("Inital Data Load:"); console.log(data); displayMovies(data); hideLoading()})
+
     //function to hide loading when data is loaded in
     function hideLoading(){
         $(".loading").addClass("canSee");
-        console.log("this is still working");
     };
 
-    //DISPLAY DATA
-    AJAX(serverURL)
-        .then(data => console.log(data))
-        .then(hideLoading);
+    //function to add movie data to html
+    function displayMovies(movies){
+        //resets html to blank, so when user adds movie page is reset
+        $("#movies").html("");
 
-    // //GET INDIVIDUAL MOVIE
-    // AJAX(serverURL + "/3" )
-    // .then(data => console.log(data))
-    //
-    // //POST MOVIE REQUEST
-    // AJAX(serverURL, "POST", {title: "I am excited for the Olympics!!!"})
-    // .then(function (data){
-    //     console.log(data);
-    // });
+        //generates html for displaying movie
+        movies.forEach(function(movie) {
+            $("#movies").append(`<h4>${movie.title}</h4>
+                                 <p>${movie.year}</p>
+                                 <p>${movie.rating}</p>
+                                 <p>${movie.plot}</p>`);
+        });
+    }
 
-// //UPDATE/EDIT existing data (whatever has id of 9 in this case)
-// // "PUT METHOD", need to put in entire object want to change
-// AJAX(serverURL + "/9", "PUT", {
-//     name: "Polaris",
-//     message: "Star Wars"
-// })
-//     .then(data => console.log(data));
+    //upon click of submit button, updates data and regenerates movies
+    $('#submit').click(function(event) {
+        event.preventDefault();
 
-//UPDATE/EDIT existing data
-//"PATCH METHOD", edit only what put in
-// AJAX(serverURL + "/9", "PATCH", {
-//     message: "Hello World"
-// })
-//     .then(data => console.log(data));
+        //POST - Update data with new user input from form
+        AJAX(serverURL, "POST", {title: $("#title").val()})
+            .then(function (data){
+                console.log(data);
+            });
 
-// //REMOVE OBJECT/MOVIE
-//     AJAX(serverURL + "/19", "DELETE")
-//     .then(data => console.log(data))
+        //Refreshes movie data to display user input/movie
+        AJAX(serverURL)
+            .then(data => {console.log("Data load after user input:"); console.log(data); displayMovies(data); hideLoading()})
+    });
 
 
-    //TODO: Function to remove loading message once data is called DONE
 
-    //TODO: Function to add data to html (cards?)
-
-    //TODO: Create form and have it update movie data base
-
-    //TODO: Make mobile responsive?
+    //TODO: CSS Styling
+    //TODO: Mobile layout responsive (make look one way on desktop and another on mobile, etc)
