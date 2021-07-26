@@ -2,8 +2,6 @@
 
 const serverURL = "https://ten-coordinated-spectrum.glitch.me/movies"
 
-    // <img src="img/example.png" alt="Example Image">
-
     //Call data & get it
     function AJAX(url, method = "GET", data){
 
@@ -27,25 +25,42 @@ const serverURL = "https://ten-coordinated-spectrum.glitch.me/movies"
 
 
 
-//function to hide loading when data is loaded in
+    //Hide loading data when data is loaded
     function hideLoading(){
         $(".loading").addClass("canSee");
     };
 
-    //function to add movie data to html
+    //Add movie data to HTML
     function displayMovies(movies) {
+
         //resets html to blank, so when user adds movie page is reset
-        $("#movies").html("");
+        $("#movieContainer").html("");
 
         //generates html for displaying movie
         movies.forEach(function (movie) {
-            $("#movies").append(`<h4>${movie.title}</h4>
+            $("#movieContainer").append(`<div class="col">
+                                <h4>${movie.title}</h4>
                                 <img src="${movie.poster}" alt="Example Image">
                                  <p>${movie.year}</p>
                                  <p>${movie.rating}</p>
-                                 <p>${movie.plot}</p>`);
+                                 <p>${movie.plot}</p>
+                                 <button type="button" id="editButton${movie.id}">Edit</button>
+                                 <button type="button" id="deleteButton${movie.id}" onclick="deleteClicked(movie.id)">Delete</button>
+                                 </div>`);
         });
     }
+
+    // function deleteClicked(idNumber){
+    //     console.log("Works!")
+    //     console.log(idNumber)
+    // }
+
+
+    // $("#editButton5").click(function(){
+    //     console.log("clicked");
+    //     // AJAX(serverURL + "/6", "DELETE")
+    //     //     .then(data => console.log(data))
+    // });
 
     //upon click of submit button, updates data and regenerates movies
     $('#submit').click(function(event) {
@@ -67,7 +82,6 @@ const serverURL = "https://ten-coordinated-spectrum.glitch.me/movies"
             .then(data => {console.log("Data load after user input:"); console.log(data); displayMovies(data); hideLoading()})
     });
 
-
-
     //TODO: CSS Styling
     //TODO: Mobile layout responsive (make look one way on desktop and another on mobile, etc)
+    //TODO: Edit and delete button
