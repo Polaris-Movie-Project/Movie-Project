@@ -36,7 +36,7 @@ const serverURL = "https://ten-coordinated-spectrum.glitch.me/movies"
         //generates html for displaying movie
         movies.forEach(function (movie) {
             $("#movieContainer").append(`<div class="col">
-                                <h4>${movie.title}</h4>
+                                <h4 id="localMovie${movie.title}">${movie.title}</h4>
                                 <img src="${movie.poster}" alt="Example Image">
                                  <p id="movieYear${movie.year}">${movie.year}</p>
                                  <p id="movieRating${movie.rating}">${movie.rating}</p>
@@ -69,8 +69,21 @@ const serverURL = "https://ten-coordinated-spectrum.glitch.me/movies"
     $(document).on("click",".editButton",function() {
 
             //sets number for ID to reference to later
-            let testID = $(this).attr("data-id");
+            let testID = $(this).attr("data-id").val();
 
+            console.log($("(#localMovie + testID)"))
+
+            let movieObject = {
+                title: "test",
+                year: "test",
+                rating: "test",
+                plot: "test"
+            }
+            //makes default text current movie properties
+            $("#movieTitle").val(movieObject.title);
+            $("#yearReleased").val(movieObject.year);
+            $("#movieRating").val(movieObject.rating);
+            $("#moviePlot").val(movieObject.plot);
            //TODO: set current values of year/rating/plot as default form text
 
             //displays pop-up form on click
