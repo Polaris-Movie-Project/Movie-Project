@@ -84,11 +84,12 @@ const serverURL = "https://ten-coordinated-spectrum.glitch.me/movies"
             //UPDATE/EDIT existing data
             //"PATCH METHOD", edit only what put in
             AJAX(serverURL + "/" + testID, "PATCH", {
-                title: "",
-                year: "",
-                rating: "",
-                plot: ""
-            })
+                title: $("#movieTitle").val(),
+                year: $("#yearReleased").val(),
+                rating: $("#movieRating").val(),
+                plot: $("#moviePlot").val()
+            }).then(AJAX(serverURL)
+                .then(data => {displayMovies(data); closeForm()}))
             //     .then(data => console.log(data));
 
             // let newYear = $("#yearReleased").val();
