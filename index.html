@@ -12,10 +12,37 @@
             visibility: hidden;
         }
 
+        .form-popup {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            right: 15px;
+            border: 3px solid #f1f1f1;
+            z-index: 9;
+        }
+
     </style>
 
 </head>
 <body>
+
+<div class="form-popup bg-light" id="myForm">
+    <form action="/action_page.php" class="form-container">
+        <h1>Edit Movie</h1>
+
+        <label for="year"><b>Year Released</b></label>
+        <input type="text" placeholder="Enter Year" name="year" id="yearReleased">
+
+        <label for="rating"><b>Rating</b></label>
+        <input type="text" placeholder="Enter Rating" name="rating">
+
+        <label for="plot"><b>Plot</b></label>
+        <input type="text" placeholder="Enter Plot" name="plot">
+
+        <button type="submit" class="btn" id="editSubmit">Submit</button>
+        <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+    </form>
+</div>
 
     <h1 class="tester">Movie Project</h1>
 

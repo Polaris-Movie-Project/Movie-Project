@@ -30,7 +30,6 @@ const serverURL = "https://ten-coordinated-spectrum.glitch.me/movies"
 
     //Add movie data to HTML
     function displayMovies(movies) {
-
         //resets html to blank, so when user adds movie page is reset
         $("#movieContainer").html("");
 
@@ -48,34 +47,53 @@ const serverURL = "https://ten-coordinated-spectrum.glitch.me/movies"
         });
     }
 
-    //click
+    //DELETES MOVIE WHEN CLICKED
     $(document).on("click",".deleteButton",function() {
-        console.log("clicked");
-        console.log($(this).attr("data-id"));
-        AJAX(serverURL + "/" + $(this).attr("data-id"), "DELETE")
-            .then( AJAX(serverURL)
-                .then(data => {console.log("Inital Data Load:"); console.log(data); displayMovies(data); hideLoading()}))
+      const actuallyDelete = confirm("Do you really want to delete selected movie?");
+      if(actuallyDelete){
+          AJAX(serverURL + "/" + $(this).attr("data-id"), "DELETE")
+              .then( AJAX(serverURL)
+                  .then(data => {console.log("Inital Data Load:"); console.log(data); displayMovies(data); hideLoading()}))
+      }
     });
 
-    //UPDATE/EDIT existing data
-    //"PATCH METHOD", edit only what put in
-    // AJAX(serverURL + "/9", "PATCH", {
-    //     message: "We are REALLY ready for the weekend!"
-    // })
-    //     .then(data => console.log(data));
+//UPDATE/EDIT existing data
+//"PATCH METHOD", edit only what put in
+// AJAX(serverURL + "/9", "PATCH", {
+//     message: "We are REALLY ready for the weekend!"
+// })
+//     .then(data => console.log(data));
 
-    //save changes --> that's when to run patch request
+//one modal in index and all edit buttons bring it up
 
-    //one modal in index and all edit buttons bring it up
-    //modal, when click button pops up. (bootstrap)
+//closes form when "closed" is clicked/selected
+    function closeForm() {
+        document.getElementById("myForm").style.display = "none";
+    }
+
+//when edit button clicked, pulls up form for input
+    $(document).on("click",".editButton",function() {
+            console.log("clicked");
+            console.log($(this).attr("data-id"));
+            $("#myForm").css("display", "block");
+            //have submit button log the data
+            //pull the data from the form
+            //patch whatever data is inputted to the ID
+    });
+
+    $('#editSubmit').click(function (event){
+        event.preventDefault();
+        console.log("Submit clicked!");
+        let tester = $("#yearReleased").val();
+        console.log(tester);
+    });
 
 
-    //all share something, edit/delete buttons share a class. document.on, click functions don't work.
-    //hidden input to hide ID, to grab, use this.attr (maybe), attribute for data
+    //add
 
 
 
-    //upon click of submit button, updates data and regenerates movies
+//upon click of submit button, updates data and regenerates movies
     $('#submit').click(function(event) {
         event.preventDefault();
 
@@ -96,5 +114,4 @@ const serverURL = "https://ten-coordinated-spectrum.glitch.me/movies"
     });
 
     //TODO: CSS Styling
-    //TODO: Mobile layout responsive (make look one way on desktop and another on mobile, etc)
-    //TODO: Edit and delete button
+    //TODO: Edit button
