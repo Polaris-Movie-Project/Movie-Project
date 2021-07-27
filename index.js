@@ -69,7 +69,7 @@ const serverURL = "https://ten-coordinated-spectrum.glitch.me/movies"
     $(document).on("click",".editButton",function() {
 
             //sets number for ID to reference to later
-            let testID = $(this).attr("data-id")
+            let testID = $(this).attr("data-id");
 
            //TODO: set current values of year/rating/plot as default form text
 
@@ -80,20 +80,32 @@ const serverURL = "https://ten-coordinated-spectrum.glitch.me/movies"
         $('#editSubmit').click(function (event){
             event.preventDefault();
             console.log("Submit clicked!");
-            let newYear = $("#yearReleased").val();
-            let newRating = $("#movieRating").val()
-            let newPlot = $("#moviePlot").val()
 
-            //updates movie with new information
+            //UPDATE/EDIT existing data
+            //"PATCH METHOD", edit only what put in
             AJAX(serverURL + "/" + testID, "PATCH", {
-                year: newYear,
-                rating: newRating,
-                plot: newPlot
+                title: "",
+                year: "",
+                rating: "",
+                plot: ""
             })
+            //     .then(data => console.log(data));
 
-            //remakes page with new updated information
-            AJAX(serverURL)
-                .then(data => displayMovies(data))
+            // let newYear = $("#yearReleased").val();
+            // let newRating = $("#movieRating").val()
+            // let newPlot = $("#moviePlot").val()
+            //
+            //
+            // //updates movie with new information
+            // AJAX(serverURL + "/" + testID, "PATCH", {
+            //     year: newYear,
+            //     rating: newRating,
+            //     plot: newPlot
+            // })
+            //
+            // //remakes page with new updated information
+            // AJAX(serverURL)
+            //     .then(data => displayMovies(data))
         });
     });
 
