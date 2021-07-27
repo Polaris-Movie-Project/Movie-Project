@@ -42,28 +42,37 @@ const serverURL = "https://ten-coordinated-spectrum.glitch.me/movies"
                                  <p>${movie.year}</p>
                                  <p>${movie.rating}</p>
                                  <p>${movie.plot}</p>
-                                 <button type="button" id="editButton${movie.id}">Edit</button>
-                                 <button type="button" id="deleteButton${movie.id}" onclick="deleteClicked(movie.id)">Delete</button>
+                                 <button type="button" id="editButton${movie.id}" class="editButton" data-id=${movie.id}>Edit</button>
+                                 <button type="button" id="deleteButton${movie.id}" class="deleteButton" data-id=${movie.id}>Delete</button>
                                  </div>`);
         });
     }
 
-    // function deleteClicked(idNumber){
-    //     console.log("Works!")
-    //     console.log(idNumber)
-    // }
+    //click
+    $(document).on("click",".editButton",function() {
+        console.log("clicked");
+        console.log($(this).attr("data-id"));
+        // AJAX(serverURL + "/6", "DELETE")
+        //     .then(data => console.log(data))
+    });
+
+    //UPDATE/EDIT existing data
+    //"PATCH METHOD", edit only what put in
+    // AJAX(serverURL + "/9", "PATCH", {
+    //     message: "We are REALLY ready for the weekend!"
+    // })
+    //     .then(data => console.log(data));
+
+    //save changes --> that's when to run patch request
+
+    //one modal in index and all edit buttons bring it up
+    //modal, when click button pops up. (bootstrap)
 
 
     //all share something, edit/delete buttons share a class. document.on, click functions don't work.
     //hidden input to hide ID, to grab, use this.attr (maybe), attribute for data
 
-    //modal, when click button pops up. (bootstrap)
 
-    // $("#editButton5").click(function(){
-    //     console.log("clicked");
-    //     // AJAX(serverURL + "/6", "DELETE")
-    //     //     .then(data => console.log(data))
-    // });
 
     //upon click of submit button, updates data and regenerates movies
     $('#submit').click(function(event) {

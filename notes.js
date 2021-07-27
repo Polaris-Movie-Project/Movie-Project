@@ -40,6 +40,6 @@
 //  TODO:Mess with display data
 //  TODO: make img cards default, add hover to switch to card body and hide/vs non hide
 //  TODO:Allow users to sort the movies by rating, title, or genre (if you have it).
-//sorting one ToDo
+        //sorting one ToDo
 //  TODO:Use a free movie API like OMDB to include extra info or render movie posters.
 //TODO: CSS Styling
