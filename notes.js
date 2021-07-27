@@ -31,3 +31,15 @@
     // use movie creation function as call back for event listener on submit button -DONE
     // make sure that the page does not reload when submit button is pressed -DONE
     // use prevent default ^ - DONE
+
+//TODO: Edit and delete button
+
+// TODO: BONUS
+//  TODO: loading icon for each change
+//  DONE:Show a loading animation instead of just text that says "loading...".
+//  TODO:Mess with display data
+//  TODO: make img cards default, add hover to switch to card body and hide/vs non hide
+//  TODO:Allow users to sort the movies by rating, title, or genre (if you have it).
+//sorting one ToDo
+//  TODO:Use a free movie API like OMDB to include extra info or render movie posters.
+//TODO: CSS Styling

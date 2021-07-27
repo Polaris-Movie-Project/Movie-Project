@@ -53,6 +53,12 @@ const serverURL = "https://ten-coordinated-spectrum.glitch.me/movies"
     //     console.log(idNumber)
     // }
 
+
+    //all share something, edit/delete buttons share a class. document.on, click functions don't work.
+    //hidden input to hide ID, to grab, use this.attr (maybe), attribute for data
+
+    //modal, when click button pops up. (bootstrap)
+
     // $("#editButton5").click(function(){
     //     console.log("clicked");
     //     // AJAX(serverURL + "/6", "DELETE")
