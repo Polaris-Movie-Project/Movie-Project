@@ -49,11 +49,12 @@ const serverURL = "https://ten-coordinated-spectrum.glitch.me/movies"
     }
 
     //click
-    $(document).on("click",".editButton",function() {
+    $(document).on("click",".deleteButton",function() {
         console.log("clicked");
         console.log($(this).attr("data-id"));
-        // AJAX(serverURL + "/6", "DELETE")
-        //     .then(data => console.log(data))
+        AJAX(serverURL + "/" + $(this).attr("data-id"), "DELETE")
+            .then( AJAX(serverURL)
+                .then(data => {console.log("Inital Data Load:"); console.log(data); displayMovies(data); hideLoading()}))
     });
 
     //UPDATE/EDIT existing data
