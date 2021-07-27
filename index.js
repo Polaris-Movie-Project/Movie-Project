@@ -23,8 +23,6 @@ const serverURL = "https://ten-coordinated-spectrum.glitch.me/movies"
     AJAX(serverURL)
         .then(data => {console.log("Inital Data Load:"); console.log(data); displayMovies(data); hideLoading()})
 
-
-
     //Hide loading data when data is loaded
     function hideLoading(){
         $(".loading").addClass("canSee");
@@ -54,7 +52,6 @@ const serverURL = "https://ten-coordinated-spectrum.glitch.me/movies"
     //     console.log("Works!")
     //     console.log(idNumber)
     // }
-
 
     // $("#editButton5").click(function(){
     //     console.log("clicked");
