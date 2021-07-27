@@ -81,8 +81,7 @@ const serverURL = "https://ten-coordinated-spectrum.glitch.me/movies"
             event.preventDefault();
             console.log("Submit clicked!");
 
-            //UPDATE/EDIT existing data
-            //"PATCH METHOD", edit only what put in
+            //PATCH
             AJAX(serverURL + "/" + testID, "PATCH", {
                 title: $("#movieTitle").val(),
                 year: $("#yearReleased").val(),
@@ -90,23 +89,6 @@ const serverURL = "https://ten-coordinated-spectrum.glitch.me/movies"
                 plot: $("#moviePlot").val()
             }).then(AJAX(serverURL)
                 .then(data => {displayMovies(data); closeForm()}))
-            //     .then(data => console.log(data));
-
-            // let newYear = $("#yearReleased").val();
-            // let newRating = $("#movieRating").val()
-            // let newPlot = $("#moviePlot").val()
-            //
-            //
-            // //updates movie with new information
-            // AJAX(serverURL + "/" + testID, "PATCH", {
-            //     year: newYear,
-            //     rating: newRating,
-            //     plot: newPlot
-            // })
-            //
-            // //remakes page with new updated information
-            // AJAX(serverURL)
-            //     .then(data => displayMovies(data))
         });
     });
 
@@ -130,5 +112,67 @@ const serverURL = "https://ten-coordinated-spectrum.glitch.me/movies"
             .then(data => {console.log("Data load after user input:"); console.log(data); displayMovies(data); hideLoading()})
     });
 
-    //TODO: CSS Styling
-    //TODO: Edit button
+
+//sort by genres when new genre is selected
+    $("#genreSelect").change(function (event){
+        event.preventDefault();
+
+        AJAX(serverURL)
+            .then(data => updateGenreMovie(data, $("#genreSelect").val()));
+    });
+
+//function to only display movies that match selected genre
+    function updateGenreMovie(movies, genre) {
+        //resets html to blank, so when user adds movie page is reset
+        $("#movieContainer").html("");
+
+        //generates html for displaying movie (only if match selected genre)
+        movies.forEach(function (movie) {
+            if(movie.genre.includes(genre)){
+                $("#movieContainer").append(`<div class="col">
+                                    <h4>${movie.title}</h4>
+                                    <img src="${movie.poster}" alt="Example Image">
+                                     <p id="movieYear${movie.year}">${movie.year}</p>
+                                     <p id="movieRating${movie.rating}">${movie.rating}</p>
+                                     <p id="moviePlot${movie.plot}">${movie.plot}</p>
+                                     <button type="button" id="editButton${movie.id}" class="editButton" data-id=${movie.id}>Edit</button>
+                                     <button type="button" id="deleteButton${movie.id}" class="deleteButton" data-id=${movie.id}>Delete</button>
+                                     </div>`);
+            }
+            else if(genre === "Genre"){
+                displayMovies(movies);
+            }
+        });
+    }
+
+//sort by rating when new rating is selected
+    $("#ratingSelect").change(function (event){
+        event.preventDefault();
+        AJAX(serverURL)
+            .then(data => updateRatingMovie(data, $("#ratingSelect").val()));
+});
+
+
+//function to only display movies that match selected rating
+    function updateRatingMovie(movies, rating) {
+        //resets html to blank, so when user adds movie page is reset
+        $("#movieContainer").html("");
+
+        //generates html for displaying movie (only if match selected genre)
+        movies.forEach(function (movie) {
+            if(movie.rating.includes(rating)){
+                $("#movieContainer").append(`<div class="col">
+                                        <h4>${movie.title}</h4>
+                                        <img src="${movie.poster}" alt="Example Image">
+                                         <p id="movieYear${movie.year}">${movie.year}</p>
+                                         <p id="movieRating${movie.rating}">${movie.rating}</p>
+                                         <p id="moviePlot${movie.plot}">${movie.plot}</p>
+                                         <button type="button" id="editButton${movie.id}" class="editButton" data-id=${movie.id}>Edit</button>
+                                         <button type="button" id="deleteButton${movie.id}" class="deleteButton" data-id=${movie.id}>Delete</button>
+                                         </div>`);
+            }
+            else if(rating === "Rating (Stars)"){
+                displayMovies(movies);
+            }
+        });
+    }
