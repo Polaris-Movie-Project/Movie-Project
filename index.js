@@ -38,9 +38,9 @@ const serverURL = "https://ten-coordinated-spectrum.glitch.me/movies"
             $("#movieContainer").append(`<div class="col">
                                 <h4>${movie.title}</h4>
                                 <img src="${movie.poster}" alt="Example Image">
-                                 <p>${movie.year}</p>
-                                 <p>${movie.rating}</p>
-                                 <p>${movie.plot}</p>
+                                 <p id="movieYear${movie.year}">${movie.year}</p>
+                                 <p id="movieRating${movie.rating}">${movie.rating}</p>
+                                 <p id="moviePlot${movie.plot}">${movie.plot}</p>
                                  <button type="button" id="editButton${movie.id}" class="editButton" data-id=${movie.id}>Edit</button>
                                  <button type="button" id="deleteButton${movie.id}" class="deleteButton" data-id=${movie.id}>Delete</button>
                                  </div>`);
@@ -52,17 +52,11 @@ const serverURL = "https://ten-coordinated-spectrum.glitch.me/movies"
       const actuallyDelete = confirm("Do you really want to delete selected movie?");
       if(actuallyDelete){
           AJAX(serverURL + "/" + $(this).attr("data-id"), "DELETE")
-              .then( AJAX(serverURL)
-                  .then(data => {console.log("Inital Data Load:"); console.log(data); displayMovies(data); hideLoading()}))
+              .then(AJAX(serverURL)
+                  .then(data => displayMovies(data)))
       }
     });
 
-//UPDATE/EDIT existing data
-//"PATCH METHOD", edit only what put in
-// AJAX(serverURL + "/9", "PATCH", {
-//     message: "We are REALLY ready for the weekend!"
-// })
-//     .then(data => console.log(data));
 
 //one modal in index and all edit buttons bring it up
 
@@ -73,25 +67,35 @@ const serverURL = "https://ten-coordinated-spectrum.glitch.me/movies"
 
 //when edit button clicked, pulls up form for input
     $(document).on("click",".editButton",function() {
-            console.log("clicked");
-            console.log($(this).attr("data-id"));
+
+            //sets number for ID to reference to later
+            let testID = $(this).attr("data-id")
+
+           //TODO: set current values of year/rating/plot as default form text
+
+            //displays pop-up form on click
             $("#myForm").css("display", "block");
-            //have submit button log the data
-            //pull the data from the form
-            //patch whatever data is inputted to the ID
+
+        //upon submit click, edit current movie values to whatever input value is
+        $('#editSubmit').click(function (event){
+            event.preventDefault();
+            console.log("Submit clicked!");
+            let newYear = $("#yearReleased").val();
+            let newRating = $("#movieRating").val()
+            let newPlot = $("#moviePlot").val()
+
+            //updates movie with new information
+            AJAX(serverURL + "/" + testID, "PATCH", {
+                year: newYear,
+                rating: newRating,
+                plot: newPlot
+            })
+
+            //remakes page with new updated information
+            AJAX(serverURL)
+                .then(data => displayMovies(data))
+        });
     });
-
-    $('#editSubmit').click(function (event){
-        event.preventDefault();
-        console.log("Submit clicked!");
-        let tester = $("#yearReleased").val();
-        console.log(tester);
-    });
-
-
-    //add
-
-
 
 //upon click of submit button, updates data and regenerates movies
     $('#submit').click(function(event) {
