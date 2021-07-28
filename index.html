@@ -52,15 +52,6 @@
             visibility: hidden;
         }
 
-        .form-popup {
-            display: none;
-            position: fixed;
-            bottom: 0;
-            right: 15px;
-            border: 3px solid #f1f1f1;
-            z-index: 9;
-        }
-
     </style>
 
 </head>
@@ -122,8 +113,12 @@
         </div>
     </div>
 
-    <!--Loading icon -->
-    <div class="loading"></div>
+    <!--TODO CENTER LOADING-->
+    <!--Loading icon tried text center, justify-content, align-content -->
+    <!--   -->
+    <div class="d-flex justify-content-center">
+        <div class="loading"></div>
+    </div>
 
     <!--Filter Options-->
     <div class="row d-flex justify-content-center" id="#filterOptions">
@@ -132,9 +127,16 @@
                 <select class="form-control" id="genreSelect">>
                     <option>Genre</option>
                     <option>Action</option>
-                    <option>Sci-Fi</option>
+                    <option>Adventure</option>
+                    <option>Animated</option>
+                    <option>Children's Film</option>
+                    <option>Comedy</option>
                     <option>Drama</option>
-                    <option>History</option>
+                    <option>Fantasy</option>
+                    <option>Musical</option>
+                    <option>Romance</option>
+                    <option>Thriller</option>
+                    <option>War</option>
                 </select>
             </div>
             <div class="form-group col">
@@ -148,7 +150,7 @@
             </div>
             <div class="form-group col">
                 <select class="form-control" id="ratingSelect">
-                    <option>Rating (Stars)</option>
+                    <option>Rating</option>
                     <option>1</option>
                     <option>2</option>
                     <option>3</option>
