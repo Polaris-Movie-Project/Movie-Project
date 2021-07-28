@@ -8,6 +8,31 @@
     <title>Movie Project</title>
 
     <style>
+
+        /* The Modal (background) */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            padding-top: 100px; /* Location of the box */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+
+        /* Modal Content */
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
         /*CSS for Loading spinning animation*/
         .loading {
             border: 16px solid #f3f3f3;
@@ -21,7 +46,6 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-
 
         /*Makes loading animation hidden*/
         .canSee{
@@ -41,26 +65,38 @@
 
 </head>
 <body>
-
-<div class="form-popup bg-light" id="myForm">
-    <form action="/action_page.php" class="form-container">
-        <h1>Edit Movie</h1>
-
-        <label for="movieTitle"><b>Movie Title</b></label>
-        <input type="text" placeholder="Enter Year" name="movieTitle" id="movieTitle">
-
-        <label for="yearReleased"><b>Year Released</b></label>
-        <input type="text" placeholder="Enter Year" name="yearReleased" id="yearReleased">
-
-        <label for="movieRating"><b>Rating</b></label>
-        <input type="text" placeholder="Enter Rating" name="movieRating" id="movieRating">
-
-        <label for="moviePlot"><b>Plot</b></label>
-        <input type="text" placeholder="Enter Plot" name="moviePlot" id="moviePlot">
-
-        <button type="submit" class="btn" id="editSubmit">Submit</button>
-        <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
-    </form>
+<!-- The Modal -->
+<div id="myModal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editMovieHeader">Edit</h5>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="mb-3">
+                                <label for="movieTitle" class="col-form-label">Movie Title:</label>
+                                <input type="text" class="form-control" id="movieTitle">
+                            </div>
+                            <div class="mb-3">
+                                <label for="yearReleased" class="col-form-label">Year Released: </label>
+                                <input type="text" class="form-control" id="yearReleased">
+                            </div>
+                            <div class="mb-3">
+                                <label for="movieRating" class="col-form-label">Rating:</label>
+                                <input type="text" class="form-control" id="movieRating">
+                            </div>
+                            <div class="mb-3">
+                                <label for="moviePlot" class="col-form-label">Plot Summary: </label>
+                                <textarea type="text" class="form-control" id="moviePlot"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" id="editSubmit">Submit</button>
+                        <button type="button" class="btn btn-primary close">Close</button>
+                    </div>
+    </div>
 </div>
 
 <div class="bg-info text-center">
@@ -89,7 +125,6 @@
     <!--Loading icon -->
     <div class="loading"></div>
 
-    <!--TODO: Show how centered form boxes -->
     <!--Filter Options-->
     <div class="row d-flex justify-content-center" id="#filterOptions">
         <div class="form-row">
@@ -125,7 +160,7 @@
     </div>
 </div>
 
-    <div id="movies" class="album">
+    <div id="movies" class="album py-5 bg-light">
        <div class="container">
            <div class="row" id="movieContainer"></div>
        </div>
