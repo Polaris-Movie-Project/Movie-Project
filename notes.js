@@ -1,3 +1,12 @@
+//TODO: BONUS
+//  TODO:Use a free movie API like OMDB to include extra info or render movie posters.
+//  TODO: make a default object to hold data so don't have to call everytime?
+//  TODO: Sorting(?)
+//  DONE: Add drop down rating selection when adding/editing
+//  TODO: Add padding to side of cards
+//  TODO: Make img fit card width
+//  TODO: make img cards default, add hover to switch to card body and hide/vs non hide
+
 // DONE: 1: Get project set up
 // Find your team member(s) -DONE
 // Create a repository -DONE
@@ -37,11 +46,3 @@
 //  DONE: Edit button - make default text match current
 //  DONE: Make Genre & rating linked
 //DONE: Center Loading Animation
-
-//TODO: Update Genres
-
-//TODO: BONUS
-//  TODO:Use a free movie API like OMDB to include extra info or render movie posters.
-//  TODO: make a default object to hold data so don't have to call everytime?
-//  TODO: Sorting(?) -
-//  TODO: make img cards default, add hover to switch to card body and hide/vs non hide

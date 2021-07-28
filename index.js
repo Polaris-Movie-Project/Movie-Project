@@ -23,19 +23,19 @@ const OMDBurl = "http://www.omdbapi.com/?apikey=[1d3b03a8]&"
 
 
 //CALL GLITCH DATA BASE
-function AJAX(url, method = "GET", data){
-    const options = {
-        method: method,
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
+    function AJAX(url, method = "GET", data){
+        const options = {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        };
+        return fetch(url, options)
+            .then(response => response.json()) //parsing data
+            .then(responseData => responseData)
+            .catch(error => error);
     };
-    return fetch(url, options)
-        .then(response => response.json()) //parsing data
-        .then(responseData => responseData)
-        .catch(error => error);
-};
 
 //-----------------------------------------
 
@@ -59,20 +59,20 @@ function displayMovies(movies) {
 
     //generates html for displaying movie
     movies.forEach(function (movie) {
-        $("#movieContainer").append(`<div class="card col-md-4 mb-4 bg-light ">
-                                    <img class="card-img-top" src="${movie.poster}" alt="Example Image">
-                                    <div class="card-body">
+        $("#movieContainer").append(`<div class="card col-md-4 mb-4 bg-light movie-card border-dark" data-id=${movie.id}>
+                                    <img class="card-img-top" src="${movie.poster}" alt=${movie.id} id="poster${movie.id}" style="width:100%">
+                                    <div class="card-body hide" id="card-body${movie.id}">
                                         <h4 class="card-title overflow-auto" id="localMovie${movie.id}">${movie.title}</h4>
                                         <p class="card-text overflow-auto" id="movieYear${movie.id}">${movie.year}</p>
                                         <p class="card-text overflow-auto" id="movieRating${movie.id}">${movie.rating}</p>
                                         <p class="card-text overflow-auto" id="moviePlot${movie.id}">${movie.plot}</p>
-                                    </div>
-                                    <div class="btn-group"></div>
-                                         <button type="button" id="editButton${movie.id}" class="editButton" data-id=${movie.id}>Edit</button>
+                                        <button type="button" id="editButton${movie.id}" class="editButton" data-id=${movie.id}>Edit</button>
                                         <button type="button" id="deleteButton${movie.id}" class="deleteButton" data-id=${movie.id}>Delete</button>
-                                     </div>
+                                    </div>
+                                  
                                      </div>`);
     });
+    cardHoverEventListener()
 };
 
 //-----------------------------------------
@@ -91,23 +91,23 @@ $(document).on("click",".deleteButton",function() {
 
 //SORT BY SELECTED GENRE
 
-//when new genre is selected, call updateGenreMovie and give it data + selected genre value
-$("#genreSelect").change(function (event){
-    event.preventDefault();
-    AJAX(serverURL)
-        .then(data => updateGenreRating(data,$("#ratingSelect").val(), $("#genreSelect").val()));
-});
+    //when new genre is selected, call updateGenreMovie and give it data + selected genre value
+    $("#genreSelect").change(function (event){
+        event.preventDefault();
+        AJAX(serverURL)
+            .then(data => updateGenreRating(data,$("#ratingSelect").val(), $("#genreSelect").val()));
+    });
 
 //-----------------------------------------
 
 // SORT BY SELECTED RATING
 
-//when new rating is selected, call updateRatingMovie and give it data + selected rating value
-$("#ratingSelect").change(function (event){
-    event.preventDefault();
-    AJAX(serverURL)
-        .then(data => updateGenreRating(data, $("#ratingSelect").val(), $("#genreSelect").val()));
-});
+    //when new rating is selected, call updateRatingMovie and give it data + selected rating value
+    $("#ratingSelect").change(function (event){
+        event.preventDefault();
+        AJAX(serverURL)
+            .then(data => updateGenreRating(data, $("#ratingSelect").val(), $("#genreSelect").val()));
+    });
 
 //-----------------------------------------
 //FUNCTION FOR LINKING GENRE & RATING
@@ -118,7 +118,7 @@ function updateGenreRating(movies, rating, genre) {
 
     //function to only display movies that match selected rating & genre
     movies.forEach(function (movie) {
-        //if no specific genre or rating is selcted, display all
+        //if no specific genre or rating is selected, display all
         if (rating === "Rating" && genre === "Genre") {
             displayMovies(movies);
         }
@@ -145,8 +145,8 @@ function updateGenreRating(movies, rating, genre) {
         //if no specific rating picked, but specific genre is, display movies with matched genre only
         else if (genre !== "Genre" && rating === "Rating") {
             if(movie.genre.includes(genre)){
-                $("#movieContainer").append(`<div class="card col-md-4 mb-4 bg-light ">
-                                            <img class="card-img-top" src="${movie.poster}" alt="Example Image">
+                $("#movieContainer").append(`<div class="card col-md-4 mb-4 bg-light">
+                                            <img class="card-img-top" src=${movie.poster} data-id=${movie.id} alt="Example Image">
                                             <div class="card-body">
                                                 <h4 class="card-title overflow-auto" id="localMovie${movie.id}">${movie.title}</h4>
                                                 <p class="card-text overflow-auto" id="movieYear${movie.id}">${movie.year}</p>
@@ -161,7 +161,7 @@ function updateGenreRating(movies, rating, genre) {
             };
         }
 
-        //if both specific raing and genre picked, show movies that match both only
+        //if both specific rating and genre picked, show movies that match both only
         else if (genre !== "Genre" && rating !== "Rating") {
             if(movie.rating.includes(rating) && movie.genre.includes(genre)){
                 $("#movieContainer").append(`<div class="card col-md-4 mb-4 bg-light ">
@@ -182,6 +182,7 @@ function updateGenreRating(movies, rating, genre) {
     });
 }
 
+cardHoverEventListener()
 //-----------------------------------------
 //ADD MOVIE WITH MODAL
 
@@ -251,8 +252,6 @@ function updateGenreRating(movies, rating, genre) {
 
             // sets number for ID to reference to later
             testID = $(this).attr("data-id");
-            console.log(testID);
-            console.log($("#localMovie" + testID).text());
 
             //DONE: set current values of year/rating/plot as default form text
             let movieObject = {
@@ -262,14 +261,12 @@ function updateGenreRating(movies, rating, genre) {
                 plot: $("#moviePlot" + testID).text()
             }
 
-
             $("#editMovieHeader").text($("#localMovie" + testID).text());
             //makes default text current movie properties
             $("#movieTitle").val(movieObject.title);
             $("#yearReleased").val(movieObject.year);
             $("#movieRating").val(movieObject.rating);
             $("#moviePlot").val(movieObject.plot);
-
         });
 
     // upon submit click, edit current movie values to whatever input value is
@@ -287,3 +284,23 @@ function updateGenreRating(movies, rating, genre) {
             }).then(AJAX(serverURL)
                 .then(data => {displayMovies(data); closeModal()}))
         });
+
+
+//-----------------------------------------
+//When hovering over image - display details
+
+let hoverID = ""
+function cardHoverEventListener() {
+
+    let hoverIn = function () {
+        hoverID = $(this).attr("data-id");
+        $("#poster" + hoverID).addClass("hide");
+        $("#card-body" + hoverID).toggleClass("hide");
+    }
+
+    let hoverOut = function () {
+        $("#poster" + hoverID).removeClass("hide");
+        $("#card-body" + hoverID).toggleClass("hide");
+    }
+    $(".movie-card").hover(hoverIn, hoverOut)
+}
