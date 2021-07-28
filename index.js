@@ -4,22 +4,22 @@ const serverURL = "https://ten-coordinated-spectrum.glitch.me/movies"
 
 const OMDBurl = "http://www.omdbapi.com/?apikey=[1d3b03a8]&"
 
-//CALL OMDB Data Base
-function omdbURL(url, method = "GET", data) {
-    const options = {
-        method: method,
-        headers: {
-            'Content-Type': 'application/json', 'Access-Control-Allow-Headers'
-        },
-        body: JSON.stringify(data),
-    };
-    fetch(url, options)
-        .then(response => response.json()) /* Movie was created successfully */
-        .catch(error => console.error(error)); /* handle errors */
-
-}
-omdbURL("http://www.omdbapi.com/?i=tt3896198&apikey=1d3b03a8")
-    // .then(data => console.log(data))
+// //CALL OMDB Data Base
+// function omdbURL(url, method = "GET", data) {
+//     const options = {
+//         method: method,
+//         headers: {
+//             'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify(data),
+//     };
+//     fetch(url, options)
+//         .then(response => response.json()) /* Movie was created successfully */
+//         .catch(error => console.error(error)); /* handle errors */
+//
+// }
+// omdbURL("http://www.omdbapi.com/?i=tt3896198&apikey=1d3b03a8")
+//     // .then(data => console.log(data))
 
 
 //CALL GLITCH DATA BASE
@@ -77,28 +77,9 @@ function displayMovies(movies) {
 
 //-----------------------------------------
 
-
-//ADD MOVIES WHEN USER CLICKS SUBMIT
-
-$('#submit').click(function(event) {
-    event.preventDefault();
-    //POST - Update data with new user input from form
-    AJAX(serverURL, "POST",
-        {
-            title: $("#title").val(),
-            year: $("#year").val(),
-            rating: $("#rating").val(),
-            plot: $("#plot").val()
-        })
-        .then(function (data) {
-            console.log(data);
-        });
-});
-//-----------------------------------------
-
 //DELETE MOVIE WHEN CLICKED
 $(document).on("click",".deleteButton",function() {
-    const actuallyDelete = confirm("Do you really want to delete selected movie?");
+    const actuallyDelete = confirm("Do you really want to delete " + $("#localMovie" + $(this).attr("data-id")).text() +"?");
     if(actuallyDelete){
         AJAX(serverURL + "/" + $(this).attr("data-id"), "DELETE")
             .then(AJAX(serverURL)
@@ -202,13 +183,41 @@ function updateGenreRating(movies, rating, genre) {
 }
 
 //-----------------------------------------
+//ADD MOVIE WITH MODAL
 
+    let addModal = document.getElementById("userInput");
+
+    //display add modal on click
+    $(document).on("click","#addMovie",function(){
+        addModal.style.display = "block";
+    })
+
+    //close add modal on click
+    $(document).on("click","#doNotAdd",function(){
+        addModal.style.display = "none";
+    })
+
+    $('#submit').click(function(event) {
+        event.preventDefault();
+        //POST - Update data with new user input from form
+        AJAX(serverURL, "POST",
+            {
+                title: $("#title").val(),
+                year: $("#year").val(),
+                rating: $("#rating").val(),
+                plot: $("#plot").val()
+            }).then(AJAX(serverURL)
+            .then(data => {displayMovies(data); closeModal()}))
+    });
+
+
+//-----------------------------------------
 //EDIT WITH MODAL
     // Get the modal
-        var modal = document.getElementById("myModal");
+        let modal = document.getElementById("myModal");
 
     // Get the <span> element that closes the modal
-        var span = document.getElementsByClassName("close")[0];
+        let span = document.getElementsByClassName("close")[0];
 
     //When close button is clicked, closes model
         span.onclick = function() {
@@ -218,12 +227,16 @@ function updateGenreRating(movies, rating, genre) {
     //function to close modal
         function closeModal(){
             modal.style.display = "none";
+            addModal.style.display = "none";
         }
 
     // When the user clicks anywhere outside of the modal, close it
         window.onclick = function(event) {
-            if (event.target == modal) {
+            if (event.target === modal) {
                 modal.style.display = "none";
+            }
+            if( event.target === addModal){
+                addModal.style.display = "none";
             }
         };
 
@@ -249,6 +262,8 @@ function updateGenreRating(movies, rating, genre) {
                 plot: $("#moviePlot" + testID).text()
             }
 
+
+            $("#editMovieHeader").text($("#localMovie" + testID).text());
             //makes default text current movie properties
             $("#movieTitle").val(movieObject.title);
             $("#yearReleased").val(movieObject.year);
