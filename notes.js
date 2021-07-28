@@ -2,10 +2,13 @@
 //  TODO:Use a free movie API like OMDB to include extra info or render movie posters.
 //  TODO: make a default object to hold data so don't have to call everytime?
 //  TODO: Sorting(?)
-//  DONE: Add drop down rating selection when adding/editing
 //  TODO: Add padding to side of cards
 //  TODO: Make img fit card width
-//  TODO: make img cards default, add hover to switch to card body and hide/vs non hide
+//  TODO: Search by Movie Title (filter as typing)
+
+//  DONE: Add drop down rating selection when adding/editing
+//  DONE: make img cards default, add hover to switch to card body and hide/vs non hide
+//  DONE: fix hover when sorting by genre
 
 // DONE: 1: Get project set up
 // Find your team member(s) -DONE
