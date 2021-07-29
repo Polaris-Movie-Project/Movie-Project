@@ -36,7 +36,6 @@ const omdbKey = "1d3b03a8";
 //ADD MOVIE DATA TO HTML
 function displayMovies(movies) {
     //resets html to blank, so when user adds movie page is reset
-
     $("#movieContainer").html("");
 
     //generates html for displaying movie
@@ -58,7 +57,6 @@ function displayMovies(movies) {
 
 //-----------------------------------------
 //DELETE MOVIE WHEN CLICKED
-
     $(document).on("click",".deleteButton",function() {
         const actuallyDelete = confirm("Do you really want to delete " + $("#localMovie" + $(this).attr("data-id")).text() +"?");
         if(actuallyDelete){
@@ -70,7 +68,6 @@ function displayMovies(movies) {
 
 //-----------------------------------------
 //SORT BY SELECTED GENRE
-
     //when new genre is selected, call updateGenreMovie and give it data + selected genre value
     $("#genreSelect").change(function (event){
         event.preventDefault();
@@ -80,7 +77,6 @@ function displayMovies(movies) {
 
 //-----------------------------------------
 // SORT BY SELECTED RATING
-
     //when new rating is selected, call updateRatingMovie and give it data + selected rating value
     $("#ratingSelect").change(function (event){
         event.preventDefault();
@@ -90,7 +86,6 @@ function displayMovies(movies) {
 
 //-----------------------------------------
 //FUNCTION FOR LINKING GENRE & RATING
-
     function updateGenreRating(movies, rating, genre) {
         //resets html to blank, so when user adds movie page is reset
         $("#movieContainer").html("");
@@ -99,8 +94,7 @@ function displayMovies(movies) {
         movies.forEach(function (movie) {
             //if no specific genre or rating is selected, display all
             if (rating === "Rating" && genre === "Genre") {
-                displayMovies(movies);
-            }
+                displayMovies(movies);}
 
             //if no specific genre picked, but specific rating is, display movies with matched rating only
             else if (genre === "Genre" && rating !== "Rating") {
@@ -116,10 +110,7 @@ function displayMovies(movies) {
                                                 <button type="button" id="editButton${movie.id}" class="editButton" data-id=${movie.id}>Edit</button>
                                                 <button type="button" id="deleteButton${movie.id}" class="deleteButton" data-id=${movie.id}>Delete</button>
                                              </div>
-                                             </div>`);
-                }
-                ;
-            }
+                                             </div>`);};}
 
             //if no specific rating picked, but specific genre is, display movies with matched genre only
             else if (genre !== "Genre" && rating === "Rating") {
@@ -135,10 +126,7 @@ function displayMovies(movies) {
                                                 <button type="button" id="editButton${movie.id}" class="editButton" data-id=${movie.id}>Edit</button>
                                                 <button type="button" id="deleteButton${movie.id}" class="deleteButton" data-id=${movie.id}>Delete</button>
                                              </div>
-                                             </div>`);
-                }
-                ;
-            }
+                                             </div>`);};}
 
             //if both specific rating and genre picked, show movies that match both only
             else if (genre !== "Genre" && rating !== "Rating") {
@@ -154,42 +142,58 @@ function displayMovies(movies) {
                                                 <button type="button" id="editButton${movie.id}" class="editButton" data-id=${movie.id}>Edit</button>
                                                 <button type="button" id="deleteButton${movie.id}" class="deleteButton" data-id=${movie.id}>Delete</button>
                                             </div>
-                                            </div>`);
-                }
-                ;
-            }
-            ;
-        });
-        cardHoverEventListener();
-    }
+                                            </div>`);};};});
+        cardHoverEventListener();}
 
 //-----------------------------------------
-//ADD MOVIE WITH MODAL
-//TODO
+//ADD MOVIE WITH MODAL & OMDB Database
     let addModal = document.getElementById("userInput");
-//
-//     //display add modal on click
+
+   //display add modal on click
     $(document).on("click","#addMovie",function(){
         addModal.style.display = "block";
-    })
-//
-//     //close add modal on click
+    });
+
+    //close add modal on click
     $(document).on("click","#doNotAdd",function(){
         addModal.style.display = "none";
-    })
-//
-//     $('#submit').click(function(event) {
-//         event.preventDefault();
-//         //POST - Update data with new user input from form
-//         AJAX(serverURL, "POST",
-//             {
-//                 title: $("#title").val(),
-//                 year: $("#year").val(),
-//                 rating: $("#rating").val(),
-//                 plot: $("#plot").val()
-//             }).then(AJAX(serverURL)
-//             .then(data => {displayMovies(data); closeModal()}))
-//     });
+    });
+
+    function omdbDatabase(userMovie){
+        let omdbURL = `http://www.omdbapi.com/?apikey=${omdbKey}&t=${userMovie}`;
+        return fetch(omdbURL)
+            .then(response => response.json())
+            .catch(error => error);
+    };
+
+    $('#submit').click(function(event) {
+        event.preventDefault();
+        let movie = $("#title").val()
+
+        omdbDatabase(movie)
+            .then(data => {postOMDBMovie(data); closeModal()});
+    });
+
+    function postOMDBMovie(movie){
+
+        if(movie.Error === "Movie not found!"){
+            alert(`${movie.Error} Please Try again!`)
+        }
+        else{
+            AJAX(serverURL, "POST",
+                {
+                    title: movie.Title,
+                    rating: Math.round(((movie.imdbRating) * 5)/10),
+                    poster: movie.Poster,
+                    year: movie.Year,
+                    genre:movie.Genre,
+                    director: movie.Director,
+                    plot: movie.Plot,
+                    actors: movie.Actors
+                }).then(AJAX(serverURL)
+                .then(data => {($("#title").val("")); displayMovies(data); closeModal()}))
+        }
+    };
 
 //-----------------------------------------
 //EDIT WITH MODAL
@@ -317,37 +321,9 @@ function displayMovies(movies) {
         cardHoverEventListener();
     };
 
-// //CALL OMDB Data Base
 
-function omdbDatabase(userMovie){
-    let omdbURL = `http://www.omdbapi.com/?apikey=${omdbKey}&t=${userMovie}`;
-    return fetch(omdbURL)
-        .then(response => response.json())
-        .catch(error => error);
-};
-
-
-$('#submit').click(function(event) {
-    event.preventDefault();
-    let movie = $("#title").val()
-
-    omdbDatabase(movie)
-        .then(data => {postOMDBMovie(data); closeModal()});
-});
-
-function postOMDBMovie(movie){
-
-    AJAX(serverURL, "POST",
-        {
-            title: movie.Title,
-            rating: Math.round(((movie.imdbRating) * 5)/10),
-            poster: movie.Poster,
-            year: movie.Year,
-            genre:movie.Genre,
-            director: movie.Director,
-            plot: movie.Plot,
-            actors: movie.Actors
-        }).then(AJAX(serverURL)
-        .then(data => {displayMovies(data); closeModal()}))
+//-----------------------------------------
+//RETURN TO TOP BUTTON
+function scrolltoTop() {
+    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
 }
-
