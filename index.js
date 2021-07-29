@@ -1,26 +1,7 @@
 "use strict"
 
-const serverURL = "https://ten-coordinated-spectrum.glitch.me/movies"
-
-const OMDBurl = "http://www.omdbapi.com/?apikey=[1d3b03a8]&"
-
-// //CALL OMDB Data Base
-// function omdbURL(url, method = "GET", data) {
-//     const options = {
-//         method: method,
-//         headers: {
-//             'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify(data),
-//     };
-//     fetch(url, options)
-//         .then(response => response.json()) /* Movie was created successfully */
-//         .catch(error => console.error(error)); /* handle errors */
-//
-// }
-// omdbURL("http://www.omdbapi.com/?i=tt3896198&apikey=1d3b03a8")
-//     // .then(data => console.log(data))
-
+const serverURL = "https://ten-coordinated-spectrum.glitch.me/movies";
+const omdbKey = "1d3b03a8";
 
 //CALL GLITCH DATA BASE
     function AJAX(url, method = "GET", data){
@@ -40,7 +21,6 @@ const OMDBurl = "http://www.omdbapi.com/?apikey=[1d3b03a8]&"
 //-----------------------------------------
 
 //DISPLAY GLITCH DATA
-
     AJAX(serverURL)
         .then(data => {displayMovies(data); hideLoading()})
 
@@ -77,19 +57,18 @@ function displayMovies(movies) {
 };
 
 //-----------------------------------------
-
 //DELETE MOVIE WHEN CLICKED
-$(document).on("click",".deleteButton",function() {
-    const actuallyDelete = confirm("Do you really want to delete " + $("#localMovie" + $(this).attr("data-id")).text() +"?");
-    if(actuallyDelete){
-        AJAX(serverURL + "/" + $(this).attr("data-id"), "DELETE")
-            .then(AJAX(serverURL)
-                .then(data => displayMovies(data)))
-    }
-});
+
+    $(document).on("click",".deleteButton",function() {
+        const actuallyDelete = confirm("Do you really want to delete " + $("#localMovie" + $(this).attr("data-id")).text() +"?");
+        if(actuallyDelete){
+            AJAX(serverURL + "/" + $(this).attr("data-id"), "DELETE")
+                .then(AJAX(serverURL)
+                    .then(data => displayMovies(data)))
+        }
+    });
 
 //-----------------------------------------
-
 //SORT BY SELECTED GENRE
 
     //when new genre is selected, call updateGenreMovie and give it data + selected genre value
@@ -100,7 +79,6 @@ $(document).on("click",".deleteButton",function() {
     });
 
 //-----------------------------------------
-
 // SORT BY SELECTED RATING
 
     //when new rating is selected, call updateRatingMovie and give it data + selected rating value
@@ -113,106 +91,105 @@ $(document).on("click",".deleteButton",function() {
 //-----------------------------------------
 //FUNCTION FOR LINKING GENRE & RATING
 
-function updateGenreRating(movies, rating, genre) {
-    //resets html to blank, so when user adds movie page is reset
-    $("#movieContainer").html("");
+    function updateGenreRating(movies, rating, genre) {
+        //resets html to blank, so when user adds movie page is reset
+        $("#movieContainer").html("");
 
-    //function to only display movies that match selected rating & genre
-    movies.forEach(function (movie) {
-        //if no specific genre or rating is selected, display all
-        if (rating === "Rating" && genre === "Genre") {
-            displayMovies(movies);
-        }
+        //function to only display movies that match selected rating & genre
+        movies.forEach(function (movie) {
+            //if no specific genre or rating is selected, display all
+            if (rating === "Rating" && genre === "Genre") {
+                displayMovies(movies);
+            }
 
-        //if no specific genre picked, but specific rating is, display movies with matched rating only
-        else if (genre === "Genre" && rating !== "Rating") {
-            if (movie.rating.includes(rating)) {
-                $("#movieContainer").append(
-                    `<div class="card col-md-4 mb-4 bg-light movie-card border-light" data-id=${movie.id} id="card${movie.id}">
-                                         <img class="card-img-top" src="${movie.poster}" alt=${movie.id} id="poster${movie.id}" style="width:100%">
-                                         <div class="card-body hide" id="card-body${movie.id}">
-                                            <h4 class="card-title overflow-auto" id="localMovie${movie.id}">${movie.title}</h4>
-                                            <p class="card-text overflow-auto" id="movieYear${movie.id}">${movie.year}</p>
-                                            <p class="card-text overflow-auto" id="movieRating${movie.id}" data-id=${movie.rating}>Rating: ${movie.rating}</p>
-                                            <p class="card-text overflow-auto" id="moviePlot${movie.id}">${movie.plot}</p>
-                                            <button type="button" id="editButton${movie.id}" class="editButton" data-id=${movie.id}>Edit</button>
-                                            <button type="button" id="deleteButton${movie.id}" class="deleteButton" data-id=${movie.id}>Delete</button>
-                                         </div>
-                                         </div>`);
+            //if no specific genre picked, but specific rating is, display movies with matched rating only
+            else if (genre === "Genre" && rating !== "Rating") {
+                if (movie.rating.includes(rating)) {
+                    $("#movieContainer").append(
+                        `<div class="card col-md-4 mb-4 bg-light movie-card border-light" data-id=${movie.id} id="card${movie.id}">
+                                             <img class="card-img-top" src="${movie.poster}" alt=${movie.id} id="poster${movie.id}" style="width:100%">
+                                             <div class="card-body hide" id="card-body${movie.id}">
+                                                <h4 class="card-title overflow-auto" id="localMovie${movie.id}">${movie.title}</h4>
+                                                <p class="card-text overflow-auto" id="movieYear${movie.id}">${movie.year}</p>
+                                                <p class="card-text overflow-auto" id="movieRating${movie.id}" data-id=${movie.rating}>Rating: ${movie.rating}</p>
+                                                <p class="card-text overflow-auto" id="moviePlot${movie.id}">${movie.plot}</p>
+                                                <button type="button" id="editButton${movie.id}" class="editButton" data-id=${movie.id}>Edit</button>
+                                                <button type="button" id="deleteButton${movie.id}" class="deleteButton" data-id=${movie.id}>Delete</button>
+                                             </div>
+                                             </div>`);
+                }
+                ;
+            }
+
+            //if no specific rating picked, but specific genre is, display movies with matched genre only
+            else if (genre !== "Genre" && rating === "Rating") {
+                if (movie.genre.includes(genre)) {
+                    $("#movieContainer").append(
+                        `<div class="card col-md-4 mb-4 bg-light movie-card border-light" data-id=${movie.id} id="card${movie.id}">
+                                             <img class="card-img-top" src="${movie.poster}" alt=${movie.id} id="poster${movie.id}" style="width:100%">
+                                             <div class="card-body hide" id="card-body${movie.id}">
+                                                <h4 class="card-title overflow-auto" id="localMovie${movie.id}">${movie.title}</h4>
+                                                <p class="card-text overflow-auto" id="movieYear${movie.id}">${movie.year}</p>
+                                                <p class="card-text overflow-auto" id="movieRating${movie.id}" data-id=${movie.rating}>Rating: ${movie.rating}</p>
+                                                <p class="card-text overflow-auto" id="moviePlot${movie.id}">${movie.plot}</p>
+                                                <button type="button" id="editButton${movie.id}" class="editButton" data-id=${movie.id}>Edit</button>
+                                                <button type="button" id="deleteButton${movie.id}" class="deleteButton" data-id=${movie.id}>Delete</button>
+                                             </div>
+                                             </div>`);
+                }
+                ;
+            }
+
+            //if both specific rating and genre picked, show movies that match both only
+            else if (genre !== "Genre" && rating !== "Rating") {
+                if (movie.rating.includes(rating) && movie.genre.includes(genre)) {
+                    $("#movieContainer").append(
+                        `<div class="card col-md-4 mb-4 bg-light movie-card border-light" data-id=${movie.id} id="card${movie.id}">
+                                            <img class="card-img-top" src="${movie.poster}" alt=${movie.id} id="poster${movie.id}" style="width:100%">
+                                            <div class="card-body hide" id="card-body${movie.id}">
+                                                <h4 class="card-title overflow-auto" id="localMovie${movie.id}">${movie.title}</h4>
+                                                <p class="card-text overflow-auto" id="movieYear${movie.id}">${movie.year}</p>
+                                                <p class="card-text overflow-auto" id="movieRating${movie.id}" data-id=${movie.rating}>Rating: ${movie.rating}</p>
+                                                <p class="card-text overflow-auto" id="moviePlot${movie.id}">${movie.plot}</p>
+                                                <button type="button" id="editButton${movie.id}" class="editButton" data-id=${movie.id}>Edit</button>
+                                                <button type="button" id="deleteButton${movie.id}" class="deleteButton" data-id=${movie.id}>Delete</button>
+                                            </div>
+                                            </div>`);
+                }
+                ;
             }
             ;
-        }
-
-        //if no specific rating picked, but specific genre is, display movies with matched genre only
-        else if (genre !== "Genre" && rating === "Rating") {
-            if (movie.genre.includes(genre)) {
-                $("#movieContainer").append(
-                    `<div class="card col-md-4 mb-4 bg-light movie-card border-light" data-id=${movie.id} id="card${movie.id}">
-                                         <img class="card-img-top" src="${movie.poster}" alt=${movie.id} id="poster${movie.id}" style="width:100%">
-                                         <div class="card-body hide" id="card-body${movie.id}">
-                                            <h4 class="card-title overflow-auto" id="localMovie${movie.id}">${movie.title}</h4>
-                                            <p class="card-text overflow-auto" id="movieYear${movie.id}">${movie.year}</p>
-                                            <p class="card-text overflow-auto" id="movieRating${movie.id}" data-id=${movie.rating}>Rating: ${movie.rating}</p>
-                                            <p class="card-text overflow-auto" id="moviePlot${movie.id}">${movie.plot}</p>
-                                            <button type="button" id="editButton${movie.id}" class="editButton" data-id=${movie.id}>Edit</button>
-                                            <button type="button" id="deleteButton${movie.id}" class="deleteButton" data-id=${movie.id}>Delete</button>
-                                         </div>
-                                         </div>`);
-            }
-            ;
-        }
-
-        //if both specific rating and genre picked, show movies that match both only
-        else if (genre !== "Genre" && rating !== "Rating") {
-            if (movie.rating.includes(rating) && movie.genre.includes(genre)) {
-                $("#movieContainer").append(
-                    `<div class="card col-md-4 mb-4 bg-light movie-card border-light" data-id=${movie.id} id="card${movie.id}">
-                                        <img class="card-img-top" src="${movie.poster}" alt=${movie.id} id="poster${movie.id}" style="width:100%">
-                                        <div class="card-body hide" id="card-body${movie.id}">
-                                            <h4 class="card-title overflow-auto" id="localMovie${movie.id}">${movie.title}</h4>
-                                            <p class="card-text overflow-auto" id="movieYear${movie.id}">${movie.year}</p>
-                                            <p class="card-text overflow-auto" id="movieRating${movie.id}" data-id=${movie.rating}>Rating: ${movie.rating}</p>
-                                            <p class="card-text overflow-auto" id="moviePlot${movie.id}">${movie.plot}</p>
-                                            <button type="button" id="editButton${movie.id}" class="editButton" data-id=${movie.id}>Edit</button>
-                                            <button type="button" id="deleteButton${movie.id}" class="deleteButton" data-id=${movie.id}>Delete</button>
-                                        </div>
-                                        </div>`);
-            }
-            ;
-        }
-        ;
-    });
-    cardHoverEventListener();
-}
+        });
+        cardHoverEventListener();
+    }
 
 //-----------------------------------------
 //ADD MOVIE WITH MODAL
-
+//TODO
     let addModal = document.getElementById("userInput");
-
-    //display add modal on click
+//
+//     //display add modal on click
     $(document).on("click","#addMovie",function(){
         addModal.style.display = "block";
     })
-
-    //close add modal on click
+//
+//     //close add modal on click
     $(document).on("click","#doNotAdd",function(){
         addModal.style.display = "none";
     })
-
-    $('#submit').click(function(event) {
-        event.preventDefault();
-        //POST - Update data with new user input from form
-        AJAX(serverURL, "POST",
-            {
-                title: $("#title").val(),
-                year: $("#year").val(),
-                rating: $("#rating").val(),
-                plot: $("#plot").val()
-            }).then(AJAX(serverURL)
-            .then(data => {displayMovies(data); closeModal()}))
-    });
-
+//
+//     $('#submit').click(function(event) {
+//         event.preventDefault();
+//         //POST - Update data with new user input from form
+//         AJAX(serverURL, "POST",
+//             {
+//                 title: $("#title").val(),
+//                 year: $("#year").val(),
+//                 rating: $("#rating").val(),
+//                 plot: $("#plot").val()
+//             }).then(AJAX(serverURL)
+//             .then(data => {displayMovies(data); closeModal()}))
+//     });
 
 //-----------------------------------------
 //EDIT WITH MODAL
@@ -287,22 +264,90 @@ function updateGenreRating(movies, rating, genre) {
                 .then(data => {displayMovies(data); closeModal()}))
         });
 
-
 //-----------------------------------------
 //When hovering over image - display details
 
-let hoverID = ""
-function cardHoverEventListener() {
+    let hoverID = ""
+    function cardHoverEventListener() {
 
-    let hoverIn = function () {
-        hoverID = $(this).attr("data-id");
-        $("#poster" + hoverID).addClass("hide");
-        $("#card-body" + hoverID).toggleClass("hide");
-    }
+        let hoverIn = function () {
+            hoverID = $(this).attr("data-id");
+            $("#poster" + hoverID).addClass("hide");
+            $("#card-body" + hoverID).toggleClass("hide");
+        }
 
-    let hoverOut = function () {
-        $("#poster" + hoverID).removeClass("hide");
-        $("#card-body" + hoverID).toggleClass("hide");
-    }
-    $(".movie-card").hover(hoverIn, hoverOut);
+        let hoverOut = function () {
+            $("#poster" + hoverID).removeClass("hide");
+            $("#card-body" + hoverID).toggleClass("hide");
+        }
+        $(".movie-card").hover(hoverIn, hoverOut);
+    };
+
+//-----------------------------------------
+//Search  while typing
+
+    $(document).on("input","#search",function(){
+        console.log($("#search").val().toLowerCase());
+        let userSearch = $("#search").val().toLowerCase();
+
+        AJAX(serverURL)
+            .then(data => updateSearch(data, userSearch));
+
+    });
+
+    function updateSearch(movies, userSearch){
+        $("#movieContainer").html("");
+
+        movies.forEach(function (movie) {
+            if ((movie.title.toLowerCase()).includes(userSearch)) {
+                $("#movieContainer").append(
+                    `<div class="card col-md-4 mb-4 bg-light movie-card border-light" data-id=${movie.id} id="card${movie.id}">
+                                            <img class="card-img-top" src="${movie.poster}" alt=${movie.id} id="poster${movie.id}" style="width:100%">
+                                            <div class="card-body hide" id="card-body${movie.id}">
+                                                <h4 class="card-title overflow-auto" id="localMovie${movie.id}">${movie.title}</h4>
+                                                <p class="card-text overflow-auto" id="movieYear${movie.id}">${movie.year}</p>
+                                                <p class="card-text overflow-auto" id="movieRating${movie.id}" data-id=${movie.rating}>Rating: ${movie.rating}</p>
+                                                <p class="card-text overflow-auto" id="moviePlot${movie.id}">${movie.plot}</p>
+                                                <button type="button" id="editButton${movie.id}" class="editButton" data-id=${movie.id}>Edit</button>
+                                                <button type="button" id="deleteButton${movie.id}" class="deleteButton" data-id=${movie.id}>Delete</button>
+                                            </div>
+                                            </div>`);
+            }
+        });
+        cardHoverEventListener();
+    };
+
+// //CALL OMDB Data Base
+
+function omdbDatabase(userMovie){
+    let omdbURL = `http://www.omdbapi.com/?apikey=${omdbKey}&t=${userMovie}`;
+    return fetch(omdbURL)
+        .then(response => response.json())
+        .catch(error => error);
 };
+
+
+$('#submit').click(function(event) {
+    event.preventDefault();
+    let movie = $("#title").val()
+
+    omdbDatabase(movie)
+        .then(data => {postOMDBMovie(data); closeModal()});
+});
+
+function postOMDBMovie(movie){
+
+    AJAX(serverURL, "POST",
+        {
+            title: movie.Title,
+            rating: Math.round(((movie.imdbRating) * 5)/10),
+            poster: movie.Poster,
+            year: movie.Year,
+            genre:movie.Genre,
+            director: movie.Director,
+            plot: movie.Plot,
+            actors: movie.Actors
+        }).then(AJAX(serverURL)
+        .then(data => {displayMovies(data); closeModal()}))
+}
+
